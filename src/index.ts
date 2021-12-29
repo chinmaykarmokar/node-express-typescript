@@ -1,7 +1,13 @@
 import express, { Request, Response } from "express";
 import connectDB from "../config/ormconfig";
+
+// Import API Routes
 import studentRoutes from "./routes/studentRoutes";
-import { Students } from "./Entities/Students";
+import movieRoutes from "./routes/movieRoutes";
+
+// Use Enviroment Variables
+import dotenv from "dotenv";
+dotenv.config()
 
 const app = express();
 
@@ -11,53 +17,11 @@ app.use(express.json());
 // Create connection with database
 connectDB();
 
-// Fetching API from several routes
+// Fetching API from the routes
 app.use("/api/students", studentRoutes);
+app.use("/api/movies", movieRoutes);
 
-// app.get("/", async (req: Request, res: Response) => {
-//     await Students.find().then((data) => {
-//         res.json(data);
-//     })
-// })
-
-// app.post("/api/students", async (req: Request, res: Response) => {
-//     try {
-//         await Students.insert(req.body);
-
-//         res.json({
-//             message: "Values have been inserted successfuly."
-//         });
-//     } catch (error) {
-//         throw error;
-//     }
-// })
-
-// app.put("/api/students/:id", async (req: Request, res: Response) => {
-//     const student = await Students.findOne(req.params.id);
-
-//     if (student) {
-//         await Students.update(student,req.body);
-
-//         res.json({
-//             message: "Values updated successfully."
-//         })
-//     } 
-//     else {
-//         res.json({
-//             message: "Student not found."
-//         })
-//     }
-// })
-
-// app.delete("/api/students/:id", async (req: Request, res: Response) => {
-//     await Students.delete(req.params.id);
-
-//     res.json({
-//         message: "Record deleted successfully."
-//     })
-// })
-
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || process.env.SERVER_PORT;
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
