@@ -1,10 +1,14 @@
 import { createConnection } from "typeorm";
 
+// Use Enviroment Variables
+import dotenv from "dotenv";
+dotenv.config()
+
 const connectDB = async () => {
     createConnection({
         type: 'postgres',
-        url: 'xyz',
-        logging: true,
+        url: process.env.DATABASE_URI,
+        // logging: true,
         synchronize: true,
         entities: ["./src/Entities/**/*.ts"],
         extra: {
