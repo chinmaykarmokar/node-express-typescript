@@ -1,6 +1,9 @@
 import express, { Request, Response } from "express";
 import connectDB from "../config/ormconfig";
 
+// Import Authentication Route
+import loginAuthRoutes from "./authentication/loginAuthRoutes";
+
 // Import API Routes
 import studentRoutes from "./routes/studentRoutes";
 import movieRoutes from "./routes/movieRoutes";
@@ -18,6 +21,7 @@ app.use(express.json());
 connectDB();
 
 // Fetching API from the routes
+app.use("/api/auth", loginAuthRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/movies", movieRoutes);
 

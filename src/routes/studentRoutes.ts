@@ -1,10 +1,13 @@
 import express, { Request, Response } from "express";
 import { Students } from "../Entities/Students";
 
+// Import Middleware
+import authenticateToken from "../middlewares/authMiddleware";
+
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
-    await Students.find().then((data) => {
+router.get("/", authenticateToken, async (req: any, res: Response) => {
+    await Students.findOne({ name: req.user.name }).then((data) => {
         res.json(data);
     })
 })
