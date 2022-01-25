@@ -13,9 +13,13 @@ import dotenv from "dotenv";
 dotenv.config()
 
 const app = express();
+const cors = require("cors");
 
 // Parse JSON 
 app.use(express.json());
+
+// Use CORS
+app.use(cors());
 
 // Create connection with database
 connectDB();
