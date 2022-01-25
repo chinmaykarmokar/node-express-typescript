@@ -37,7 +37,7 @@ const authenticateToken = async (req: any, res: any, next: any) => {
         return res.sendStatus(401);
     }
 
-    if (latestToken[0].unique_id != tokenInUse?.unique_id || tokenValidTime > 20) {
+    if (latestToken[0].unique_id != tokenInUse?.unique_id || tokenValidTime >= 0.95) {
         return res.status(401).json({
             message: "This token has been invalidated."
         })
