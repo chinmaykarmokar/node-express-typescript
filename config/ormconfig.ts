@@ -2,7 +2,7 @@ import { createConnection } from "typeorm";
 
 // Use Enviroment Variables
 import dotenv from "dotenv";
-dotenv.config()
+dotenv.config();
 
 const connectDB = async () => {
     createConnection({
@@ -16,7 +16,7 @@ const connectDB = async () => {
                 "rejectUnauthorized": false
             }
         }
-    })
+    });
 }
 
 export default connectDB;

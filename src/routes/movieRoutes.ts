@@ -5,7 +5,12 @@ const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
     await Movies.find().then((data) => {
-        res.json(data);
+        res.json(
+            {
+                data: data,
+                worker: process.pid
+            }
+        );
     })
 })
 
