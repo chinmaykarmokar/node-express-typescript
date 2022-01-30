@@ -18,8 +18,6 @@ const authenticateToken = async (req: any, res: any, next: any) => {
 
     const tokenValidTime = Math.abs(new Date().valueOf() - findUser[0].token_created_on.valueOf())/60000;
 
-    // console.log(Math.abs(new Date().valueOf() - findUser[0].token_created_on.valueOf())/60000)
-
     const latestToken = await TokenList.find(
         { 
             where: {name: findUser[0]?.name},
@@ -49,7 +47,6 @@ const authenticateToken = async (req: any, res: any, next: any) => {
         }
 
         req.user = user;
-        // await TokenList.insert({token_issued: token});
         next();
     })
 }
