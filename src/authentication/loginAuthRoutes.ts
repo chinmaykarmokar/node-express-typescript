@@ -13,6 +13,9 @@ const unique_id = crypto.randomBytes(16).toString("hex");
 import dotenv from "dotenv";
 dotenv.config();
 
+// Import Application Logger
+import logger from "../../loggers/logger";
+
 // Login route
 router.post("/login", async (req: Request, res: Response) => {
     const studentExists = await Students.findOne({ where: {name: req.body.name} });
@@ -41,15 +44,21 @@ router.post("/login", async (req: Request, res: Response) => {
                     accessToken: accessToken
                 }
             )
+
+            logger.info(`User ${student.name} granted access for login.`);
         }
         catch (err) {
             throw err;
+
+            logger.error(`User ${student.name} not granted access for login.`);
         }
     }
     else {
         res.json({
             status: "Student of this name does not exist."
         })
+
+        logger.error(`Student of the name ${req.body.name} does not exist.`);
     }
 })
 

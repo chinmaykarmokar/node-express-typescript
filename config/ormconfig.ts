@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const connectDB = async () => {
-    createConnection({
+    return createConnection({
         type: 'postgres',
         url: process.env.DATABASE_URI,
         // logging: true,
