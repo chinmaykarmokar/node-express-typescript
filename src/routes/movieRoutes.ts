@@ -4,6 +4,9 @@ import { Movies } from "../Entities/Movies";
 // Import Application Logger
 import logger from "../../loggers/logger";
 
+// Import Validator
+import Joi from "joi";
+
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
@@ -21,13 +24,29 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.post("/", async (req: Request, res: Response) => {
     try {
-        await Movies.insert(req.body);
+        const schema = Joi.object().keys({
+            name: Joi.string().required(),
+            year_released: Joi.number().required(),
+            rating: Joi.number().required()
+        })
 
-        res.json({
-            message: "Values have been inserted successfuly."
-        });
+        if (schema.validate(req.body).error) {
+            res.json({
+                validationErrors: schema.validate(req.body).error?.details
+            })
 
-        logger.info("POST request made for movies API.");
+            logger.error(`Incorrect payload provided for adding new movie.`);
+        }
+
+        else {
+            await Movies.insert(schema.validate(req.body).value);
+
+            res.json({
+                message: "Values have been inserted successfuly."
+            });
+
+            logger.info("POST request made for movies API.");
+        }
     } catch (error) {
         throw error;
 

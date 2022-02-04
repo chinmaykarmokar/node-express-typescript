@@ -7,6 +7,9 @@ import authenticateToken from "../middlewares/authMiddleware";
 // Import Application Logger
 import logger from "../../loggers/logger";
 
+// Import Validator
+import Joi from "joi";
+
 const router = express.Router();
 
 router.get("/", authenticateToken, async (req: any, res: Response) => {
@@ -19,13 +22,30 @@ router.get("/", authenticateToken, async (req: any, res: Response) => {
 
 router.post("/", async (req: Request, res: Response) => {
     try {
-        await Students.insert(req.body);
+        const schema = Joi.object().keys({
+            name: Joi.string().required(),
+            age: Joi.number().required(),
+            email: Joi.string().email().required(),
+            hobby: Joi.string().required()
+        })
 
-        res.json({
-            message: "Values have been inserted successfuly."
-        });
+        if (schema.validate(req.body).error) {
+            res.json({
+                validationErrors: schema.validate(req.body).error?.details
+            })
 
-        logger.info("POST request made for students API.")
+            logger.error(`Incorrect payload provided for adding new students.`);
+        }
+
+        else {
+            await Students.insert(schema.validate(req.body).value);
+
+            res.json({
+                message: "Values have been inserted successfuly."
+            });
+
+            logger.info("POST request made for students API.")
+        }
     } catch (error) {
         throw error;
     }
